@@ -8,6 +8,13 @@ import android.media.MediaRecorder;
 import android.os.Process;
 import android.util.Log;
 
+import java.util.ArrayList;
+import java.util.List;
+
+interface SoundListener {
+    void onSoundDetected();
+}
+
 /**
  * Created by Wilbur on 08/28/16.
  */
@@ -21,6 +28,10 @@ public class SoundDetector implements Runnable {
         return mInstance;
     }
     SoundDetector() {}
+
+    private List<SoundListener> mListeners = new ArrayList<SoundListener>();
+    public void addListener(SoundListener listener) { mListeners.add(listener); }
+    public void OnDetect() { for (SoundListener listener : mListeners) listener.onSoundDetected(); }
 
     public void Start() {
         isRecording = true;
@@ -48,7 +59,7 @@ public class SoundDetector implements Runnable {
             total += Math.abs(bufferD[i] * i * i);
         }
         if (total > 2000000) {
-            Log.d("HELP", str(total));
+            OnDetect();
         }
     }
 

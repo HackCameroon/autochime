@@ -24,8 +24,10 @@ interface AutoDetectListener {
  * <p/>
  * 3. to stop Fake ring tone, call mViolentDetector.mute();
  */
-public class AutoDetector implements MotionListener {
+public class AutoDetector implements MotionListener, SoundListener {
     SensorManager mSensorManager = null;
+
+
 
     private static AutoDetector mInstance = null;
     public static AutoDetector instance() {
@@ -37,7 +39,30 @@ public class AutoDetector implements MotionListener {
         MotionDetector.instance().addListener(this);
     }
 
-    @Override public void onMotionChange(boolean detected) { OnDetectChange(detected); }
+    long mMotion = 0;
+    long mPrevMotionTime = 0;
+    long mSound = 0;
+    long mPrevSoundTime = 0;
+
+    @Override public void onMotionChange(boolean detected) {
+        long currTime = System.currentTimeMillis();
+        mMotion = (currTime - mPrevMotionTime) / 2 + mMotion / 2;
+        mPrevMotionTime  = currTime;
+        CheckTotal();
+    }
+    @Override public void onSoundDetected() {
+        long currTime = System.currentTimeMillis();
+        mSound = (currTime - mPrevSoundTime) / 2 + mSound / 2;
+        mPrevSoundTime = currTime;
+        CheckTotal();
+    }
+
+    private void CheckTotal() {
+        if (mPrevMotionTime == 0 || mPrevSoundTime == 0)
+            return;
+        long check = mSound + mMotion;
+        Log.d("ASD", Long.toString(check));
+    }
 
     boolean mIsDetected = false;
     private List<AutoDetectListener> mListeners = new ArrayList<AutoDetectListener>();
