@@ -13,6 +13,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        StateMachine stateMachine = new StateMachine(this);
+
         // just testing
         SMSManager smsManager = new SMSManager();
         smsManager.sendHardcode();

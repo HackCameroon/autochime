@@ -30,14 +30,11 @@ interface AutoDetectListener {
  */
 public class AutoDetector {
     SensorEventListener mSL;
-    Ringtone mFakeRingtone;
     Context mContext;
     private boolean mPlaying = false;
 
     public AutoDetector(Context c) {
         mContext = c;
-        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE);
-        mFakeRingtone = RingtoneManager.getRingtone(c, notification);
         regVioListner();
     }
 
@@ -87,7 +84,6 @@ public class AutoDetector {
 //					M.l("x=" + x + " y=" + y + " z=" + z);
 //					M.l("mAccel=" + mAccel + " mAccelLast=" + mAccelLast
 //							+ " mAccelCurrent=" + mAccelCurrent);
-                    mFakeRingtone.play();
 
 //					final SoundMeter sm = new SoundMeter();
 //					sm.start();
@@ -131,10 +127,5 @@ public class AutoDetector {
     protected void finalize() throws Throwable {
         super.finalize();
         unregVioListner();
-    }
-
-    public void mute() {
-        mFakeRingtone.stop();
-        mPlaying = false;
     }
 }

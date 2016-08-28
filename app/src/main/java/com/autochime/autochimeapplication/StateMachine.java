@@ -33,6 +33,10 @@ public class StateMachine implements AutoDetectListener {
         mAlarm = new Alarm(context);
     }
 
+    public void SetState(final State newState) {
+        Transition(newState);
+    }
+
     @Override public void onAutoDetect() { CheckState(); }
 
     private List<TransitionListener> mListeners = new ArrayList<TransitionListener>();
