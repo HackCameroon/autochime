@@ -28,7 +28,7 @@ public class SMSManager {
         dummyPhoneNo2 = "5556"; // second emulator
         testPhoneNo = "17476667469";
 
-        dummyMessageBody = "Your friend Kelly may be in danger. Please review: https://rec.autochime.com/c3a564b6. Location: <37.772533, -122.444014> near Facebook HQ. Reply 'HELP' to send her help.";
+        dummyMessageBody = "Your friend Kelly may be in danger. Please review: http://autochime.imtiana.com/ Location: 37.772533, -122.444014 near Facebook HQ. Reply 'HELP' to send her help.";
         dummyDownloadBody = "Review this recording from her phone: <Download audio>";
     }
 
