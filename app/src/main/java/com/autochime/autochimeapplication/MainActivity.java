@@ -13,6 +13,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        SMSManager smsManager = new SMSManager();
+        smsManager.send();
+
         // Show contact selector
 //        FragmentTransaction ft = getFragmentManager().beginTransaction();
 //        ft.add(AddContactFragment.newInstance(), null);
