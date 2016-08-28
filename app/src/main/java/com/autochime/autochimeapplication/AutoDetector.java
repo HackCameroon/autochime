@@ -43,7 +43,7 @@ public class AutoDetector implements SensorEventListener {
     public void addListener(AutoDetectListener listener) {
         mListeners.add(listener);
     }
-    private void OnDetectChange(boolean detected) {
+    public void OnDetectChange(boolean detected) {
         mIsDetected = detected;
         for (AutoDetectListener listener : mListeners) {
             listener.onAutoDetectChange(mIsDetected);
