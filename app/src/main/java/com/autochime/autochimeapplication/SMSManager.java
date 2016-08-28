@@ -17,7 +17,7 @@ public class SMSManager {
 
     // default method with hard coded messages
     public void send() {
-        if (Build.VERSION.SDK_INT < 23) {
+//        if (Build.VERSION.SDK_INT < 23) {
             try {
                 SmsManager smsManager = SmsManager.getDefault();
                 smsManager.sendTextMessage(dummyPhoneNo, null, dummyMessageBody, null, null);
@@ -25,7 +25,7 @@ public class SMSManager {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
+//       }
     }
 
     public void send(String userName, String phoneNo, String messageBody) {
