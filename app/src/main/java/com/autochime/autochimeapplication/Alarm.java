@@ -22,6 +22,7 @@ public class Alarm implements TransitionListener
         StateMachine.instance().addListener(this);
         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         mMp = MediaPlayer.create(AutoChimeApplication.getAppContext(), notification);
+        mMp.setLooping(true);
     }
 
     @Override public void onTransition(StateMachine.State state) {
@@ -37,10 +38,13 @@ public class Alarm implements TransitionListener
 
     public void SetState(final boolean state) {
         if (state) {
-            mMp.setLooping(true);
-            mMp.start();
+            if(!mMp.isPlaying()) {
+                mMp.start();
+            }
         } else {
-            mMp.stop();
+            if (mMp.isPlaying()) {
+                mMp.pause();
+            }
         }
     }
 }
