@@ -28,9 +28,9 @@ public class RecordingAdapter extends CursorAdapter {
         TextView latitudeView = (TextView) view.findViewById(R.id.history_cell_latitude);
         TextView longitudeView = (TextView) view.findViewById(R.id.history_cell_longitude);
 
-        long lon = cursor.getLong(cursor.getColumnIndexOrThrow(
+        double lon = cursor.getDouble(cursor.getColumnIndexOrThrow(
                 ViolenceRecording.RecordEntry.COLUMN_NAME_LONGITUDE));
-        long lat = cursor.getLong(cursor.getColumnIndexOrThrow(
+        double lat = cursor.getDouble(cursor.getColumnIndexOrThrow(
                 ViolenceRecording.RecordEntry.COLUMN_NAME_LATITUDE));
         mRecordFileName = cursor.getString(cursor.getColumnIndexOrThrow(
                 ViolenceRecording.RecordEntry.COLUMN_NAME_RECORDING_FILE_NAME));
