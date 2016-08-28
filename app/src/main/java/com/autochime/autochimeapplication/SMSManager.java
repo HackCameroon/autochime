@@ -3,6 +3,8 @@ package com.autochime.autochimeapplication;
 import android.os.Build;
 import android.telephony.SmsManager;
 
+import java.util.ArrayList;
+
 /**
  * Created by tianaim on 8/27/16.
  */
@@ -18,14 +20,15 @@ public class SMSManager {
 
         dummyPhoneNo = "5554"; // first emulator
         dummyPhoneNo2 = "5556"; // second emulator
-        dummyMessageBody = "Your friend Kelly may be in danger -  listen to this recording from her phone. https://rec.autochime.com/c3a564b6. If you think she is in danger....";
+        dummyMessageBody = "Your friend Kelly may be in danger -  listen to this recording from her phone. https://rec.autochime.com/c3a564b6. If you think she is in danger, click here to send her help. If you think she is fine, ignore this message.";
     }
 
     public void sendHardcode() {
         if (Build.VERSION.SDK_INT < 23) {
             try {
-                smsManager.sendTextMessage(dummyPhoneNo, null, dummyMessageBody, null, null);
-                smsManager.sendTextMessage(dummyPhoneNo2, null, dummyMessageBody, null, null); // send to both just in case the emulators get mixed up during demos
+                ArrayList<String> parts = smsManager.divideMessage(dummyMessageBody);
+                smsManager.sendMultipartTextMessage(dummyPhoneNo, null, parts, null, null);
+                smsManager.sendMultipartTextMessage(dummyPhoneNo2, null, parts, null, null);
             } catch (Exception e) {
                 e.printStackTrace();
             }
