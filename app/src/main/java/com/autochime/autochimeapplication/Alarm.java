@@ -1,28 +1,37 @@
 package com.autochime.autochimeapplication;
 
+import android.app.Activity;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Bundle;
+import android.util.Log;
 
 /**
  * Created by Wilbur on 08/27/16.
  */
 public class Alarm
 {
-    MediaPlayer m_mp;
+    private MediaPlayer mMp;
 
-    public Alarm(Context context) {
+    private static Alarm mInstance = null;
+    public static Alarm instance() {
+        if (mInstance == null)
+            mInstance = new Alarm();
+        return mInstance;
+    }
+    Alarm() {
         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
-        m_mp = MediaPlayer.create(context, notification);
+        //mMp = MediaPlayer.create(this, notification);
     }
 
     public void SetState(final boolean state) {
         if (state) {
-            m_mp.setLooping(true);
-            m_mp.start();
-        }else {
-            m_mp.stop();
+            mMp.setLooping(true);
+            mMp.start();
+        } else {
+            mMp.stop();
         }
     }
 }

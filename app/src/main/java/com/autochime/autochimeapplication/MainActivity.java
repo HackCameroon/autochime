@@ -1,5 +1,6 @@
 package com.autochime.autochimeapplication;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.CheckBox;
@@ -13,23 +14,23 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        StateMachine stateMachine = new StateMachine(this);
+        StateMachine stateMachine = StateMachine.instance();
 
         // just testing
-        SMSManager smsManager = new SMSManager();
-        smsManager.sendHardcode();
-
-        mRecordCheckbox = (CheckBox) findViewById(R.id.main_record_button);
-        mRecordCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    startManualRecording();
-                } else {
-                    stopManualRecording();
-                }
-            }
-        });
+//        SMSManager smsManager = new SMSManager();
+//        smsManager.sendHardcode();
+//
+//        mRecordCheckbox = (CheckBox) findViewById(R.id.main_record_button);
+//        mRecordCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+//                if (isChecked) {
+//                    startManualRecording();
+//                } else {
+//                    stopManualRecording();
+//                }
+//            }
+//        });
 
         // Show contact selector
 //        FragmentTransaction ft = getFragmentManager().beginTransaction();

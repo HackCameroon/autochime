@@ -1,6 +1,9 @@
 package com.autochime.autochimeapplication;
 
+import android.app.Activity;
 import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,11 +30,18 @@ public class StateMachine implements AutoDetectListener {
     private AutoDetector mAutoDetector = null;
     private Alarm mAlarm = null;
 
-    public StateMachine(Context context) {
+    private static StateMachine mInstance = null;
+    public static StateMachine instance() {
+        if (mInstance == null)
+            mInstance = new StateMachine();
+        return mInstance;
+    }
+    StateMachine() {
         // Initialize all members here
-        mAudioRecorder = new AudioRecorder();
-        mAutoDetector = new AutoDetector(context);
-        mAlarm = new Alarm(context);
+        mAudioRecorder = AudioRecorder.instance();
+        mAutoDetector = AutoDetector.instance();
+        mAlarm = Alarm.instance();
+        //Transition(State.Default);
     }
 
     // Allow specific setting of States
@@ -40,7 +50,7 @@ public class StateMachine implements AutoDetectListener {
     }
 
     // Event Listeners
-    @Override public void onAutoDetect() { CheckState(); }
+    @Override public void onAutoDetectChange(boolean detected) { CheckState(); }
 
     // Event Handlers
     private List<TransitionListener> mListeners = new ArrayList<TransitionListener>();
@@ -58,8 +68,8 @@ public class StateMachine implements AutoDetectListener {
         mState = newState;
         switch (mState) {
             case Default:
-                mAudioRecorder.StopRecord();
-                mAlarm.SetState(false);
+                if (mAudioRecorder != null) mAudioRecorder.StopRecord();
+                if (mAlarm != null) mAlarm.SetState(false);
                 break;
             case AutoAlarm:
                 mAudioRecorder.StartRecord();
