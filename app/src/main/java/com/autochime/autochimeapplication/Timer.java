@@ -25,11 +25,7 @@ public class Timer implements TransitionListener {
 
     private List<TimerListener> mListeners = new ArrayList<TimerListener>();
     public void addListener(TimerListener listener) { mListeners.add(listener); }
-    private void OnExpire() {
-        for (TimerListener listener : mListeners) {
-            listener.onTimerExpire();
-        }
-    }
+    private void OnExpire() { for (TimerListener listener : mListeners) listener.onTimerExpire(); }
 
     @Override public void onTransition(StateMachine.State state) {
         switch (state) {

@@ -29,12 +29,12 @@ public class MainActivity extends AppCompatActivity {
 //    private LocationListener listener;
 //
 //
-//    @Override
-//    protected void onCreate(Bundle savedInstanceState) {
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.activity_main);
-
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
         StateMachine stateMachine = StateMachine.instance();
+    }
 
         // just testing
 //        SMSManager smsManager = new SMSManager();
