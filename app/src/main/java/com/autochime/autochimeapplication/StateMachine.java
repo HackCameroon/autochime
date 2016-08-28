@@ -32,11 +32,14 @@ public class StateMachine implements
         return mInstance;
     }
     StateMachine() {
-        // Initialize all members here
+        // Initialize all singletons here
         AutoDetector.instance();
         ManualDetector.instance();
         RealButtonEvent.instance();
         FakeButtonEvent.instance();
+        Alarm.instance();
+        AudioRecorder.instance();
+
         SetState(State.Default);
     }
 
