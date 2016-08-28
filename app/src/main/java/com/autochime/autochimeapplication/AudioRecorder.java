@@ -1,10 +1,7 @@
 package com.autochime.autochimeapplication;
 
-import android.app.Activity;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
-import android.net.Uri;
-import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 
@@ -35,17 +32,8 @@ public class AudioRecorder implements TransitionListener
             case Default:
                 StopRecord();
                 break;
-            case AutoAlarm:
-                StartRecord();
-                break;
-            case ManualAlarm:
-                StartRecord();
-                break;
-            case Notify:
-                break;
-            case PostNotify:
-                break;
             default:
+                StartRecord();
                 break;
         }
     }

@@ -14,7 +14,8 @@ public class StateMachine implements
         AutoDetectListener,
         ManualDetectListener,
         RealButtonListener,
-        FakeButtonListener
+        FakeButtonListener,
+        TimerListener
 {
     public enum State {
         Default,
@@ -32,11 +33,15 @@ public class StateMachine implements
         return mInstance;
     }
     StateMachine() {
-        // Initialize all members here
+        // Initialize all singletons here
         AutoDetector.instance();
         ManualDetector.instance();
         RealButtonEvent.instance();
         FakeButtonEvent.instance();
+        Alarm.instance();
+        AudioRecorder.instance();
+        Timer.instance();
+
         SetState(State.Default);
     }
 
@@ -48,10 +53,52 @@ public class StateMachine implements
     }
 
     // Event Listeners
-    @Override public void onAutoDetectChange(boolean detected) { CheckState(); }
-    @Override public void onManualDetectChange(boolean detected) { SetState(State.ManualAlarm); }
-    @Override public void onRealButtonPress() {};
-    @Override public void onFakeButtonPress() {};
+    @Override public void onAutoDetectChange(boolean detected) {
+        switch (mState) {
+            case Default:
+                if (detected) SetState(State.AutoAlarm);
+                break;
+            default:
+                break;
+        }
+    }
+    @Override public void onManualDetectChange(boolean detected) {
+        switch(mState) {
+            case Default:
+                if (detected) SetState(State.ManualAlarm);
+                break;
+            default:
+                break;
+        }
+    }
+    @Override public void onRealButtonPress() {
+        switch (mState) {
+            case AutoAlarm:
+            case PostNotify:
+                SetState(State.Default);
+                break;
+            default:
+                break;
+        }
+    };
+    @Override public void onFakeButtonPress() {
+        switch (mState) {
+            case AutoAlarm:
+                SetState(State.Notify);
+                break;
+            default:
+                break;
+        }
+    };
+    @Override public void onTimerExpire() {
+        switch (mState) {
+            case AutoAlarm:
+                SetState(State.Notify);
+                break;
+            default:
+                break;
+        }
+    }
 
     // Event Handlers
     private List<TransitionListener> mListeners = new ArrayList<TransitionListener>();

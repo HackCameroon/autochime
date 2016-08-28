@@ -25,21 +25,11 @@ public class Alarm implements TransitionListener
 
     @Override public void onTransition(StateMachine.State state) {
         switch (state) {
-            case Default:
-                SetState(false);
-                break;
             case AutoAlarm:
                 SetState(true);
                 break;
-            case ManualAlarm:
-                SetState(false);
-                break;
-            case Notify:
-                break;
-            case PostNotify:
-                SetState(false);
-                break;
             default:
+                SetState(false);
                 break;
         }
     }
