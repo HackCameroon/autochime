@@ -14,7 +14,8 @@ public class StateMachine implements
         AutoDetectListener,
         ManualDetectListener,
         RealButtonListener,
-        FakeButtonListener
+        FakeButtonListener,
+        TimerListener
 {
     public enum State {
         Default,
@@ -39,6 +40,7 @@ public class StateMachine implements
         FakeButtonEvent.instance();
         Alarm.instance();
         AudioRecorder.instance();
+        Timer.instance();
 
         SetState(State.Default);
     }
@@ -88,6 +90,15 @@ public class StateMachine implements
                 break;
         }
     };
+    @Override public void onTimerExpire() {
+        switch (mState) {
+            case AutoAlarm:
+                SetState(State.Notify);
+                break;
+            default:
+                break;
+        }
+    }
 
     // Event Handlers
     private List<TransitionListener> mListeners = new ArrayList<TransitionListener>();
