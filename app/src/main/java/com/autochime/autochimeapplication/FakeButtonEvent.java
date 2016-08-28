@@ -20,7 +20,6 @@ public class FakeButtonEvent {
     FakeButtonEvent() {};
 
     private List<FakeButtonListener> mListeners = new ArrayList<FakeButtonListener>();
-    public void addListener(FakeButtonListener listener) { mListeners.add(listener); }
     public void OnPress() {
         for (FakeButtonListener listener : mListeners) {
             listener.onFakeButtonPress();

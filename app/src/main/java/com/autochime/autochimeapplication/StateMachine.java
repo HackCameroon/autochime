@@ -102,20 +102,10 @@ public class StateMachine implements
 
     // Event Handlers
     private List<TransitionListener> mListeners = new ArrayList<TransitionListener>();
-    public void addListener(TransitionListener listener) {
-        mListeners.add(listener);
-    }
     private void Transition(final State newState) {
         mState = newState;
         for (TransitionListener listener : mListeners) {
             listener.onTransition(mState);
-        }
-    }
-
-    private void CheckState() {
-        switch (mState) {
-            default:
-                break;
         }
     }
 }

@@ -40,9 +40,6 @@ public class AutoDetector implements SensorEventListener {
 
     boolean mIsDetected = false;
     private List<AutoDetectListener> mListeners = new ArrayList<AutoDetectListener>();
-    public void addListener(AutoDetectListener listener) {
-        mListeners.add(listener);
-    }
     public void OnDetectChange(boolean detected) {
         mIsDetected = detected;
         for (AutoDetectListener listener : mListeners) {
