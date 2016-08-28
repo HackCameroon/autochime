@@ -31,18 +31,18 @@ public class AudioRecorder implements TransitionListener
     @Override public void onTransition(StateMachine.State state) {
         switch (state) {
             case Default:
-                StopRecord();
+               // StopRecord();
                 break;
             default:
-                StartRecord();
+                //StartRecord();
                 break;
         }
     }
 
     public void StartRecord() {
         m_mr = new MediaRecorder();
-            m_mr.setAudioSource(MediaRecorder.AudioSource.MIC);
-            m_mr.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        m_mr.setAudioSource(MediaRecorder.AudioSource.MIC);
+        m_mr.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         m_mr.setOutputFile(m_filename);
         m_mr.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
         try {

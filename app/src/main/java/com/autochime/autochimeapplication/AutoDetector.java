@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +77,8 @@ public class AutoDetector implements SensorEventListener {
         mAccel = mAccel * 0.9f + delta; // perform low-cut filter
         // if (mAccel * shs > 5 * 20) {
         if (mAccel * shs > 10 * 20) {
-            OnDetectChange(true);
+            if (!mIsDetected)
+                OnDetectChange(true);
 //					M.l("x=" + x + " y=" + y + " z=" + z);
 //					M.l("mAccel=" + mAccel + " mAccelLast=" + mAccelLast
 //							+ " mAccelCurrent=" + mAccelCurrent);
@@ -95,7 +97,8 @@ public class AutoDetector implements SensorEventListener {
 
 
         } else {
-            OnDetectChange(false);
+            if (mIsDetected)
+                OnDetectChange(false);
         }
     }
 

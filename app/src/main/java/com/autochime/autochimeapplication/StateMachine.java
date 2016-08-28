@@ -39,7 +39,6 @@ public class StateMachine implements
         RealButtonEvent.instance().addListener(this);
         FakeButtonEvent.instance().addListener(this);
         Timer.instance().addListener(this);
-
         SetState(State.Default);
     }
 
@@ -49,6 +48,9 @@ public class StateMachine implements
         switch (newState) {
             case AutoAlarm:
                 Timer.instance().Start(5000);
+                break;
+            case ManualAlarm:
+                SetState(State.Notify);
                 break;
             case Notify:
                 SetState(State.PostNotify);
