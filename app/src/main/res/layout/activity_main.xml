@@ -35,6 +35,6 @@
     android:layout_alignParentBottom="true"
     android:textSize="@dimen/tiny_text"
     android:textAlignment="center"
-    android:text="@string/be_safe_disclaimer"/>
+    android:text="@string/be_safe_disclaimer" />
 
 </RelativeLayout>
