@@ -32,17 +32,8 @@ public class AudioRecorder implements TransitionListener
             case Default:
                 StopRecord();
                 break;
-            case AutoAlarm:
-                StartRecord();
-                break;
-            case ManualAlarm:
-                StartRecord();
-                break;
-            case Notify:
-                break;
-            case PostNotify:
-                break;
             default:
+                StartRecord();
                 break;
         }
     }

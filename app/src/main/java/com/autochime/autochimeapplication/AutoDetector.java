@@ -38,15 +38,20 @@ public class AutoDetector implements SensorEventListener {
         mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_NORMAL);
     }
 
+    boolean mIsDetected = false;
     private List<AutoDetectListener> mListeners = new ArrayList<AutoDetectListener>();
     public void addListener(AutoDetectListener listener) {
         mListeners.add(listener);
     }
     private void OnDetectChange(boolean detected) {
+        mIsDetected = detected;
         for (AutoDetectListener listener : mListeners) {
-            listener.onAutoDetectChange(detected);
+            listener.onAutoDetectChange(mIsDetected);
         }
     }
+    public boolean IsDetected() { return mIsDetected; }
+
+
     private float mAccel = 0; // acceleration apart from gravity
     private float mAccelCurrent = SensorManager.GRAVITY_EARTH; // current
     // acceleration
