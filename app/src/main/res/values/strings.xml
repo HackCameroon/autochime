@@ -1,5 +1,5 @@
 <resources>
-  <string name="app_name">AutoChimeApplication</string>
+  <string name="app_name">Autochime</string>
   <string name="resume">Location</string>
   <string name="not_recording_button">Something\'s Weird!</string>
   <string name="recording_button">I\'m safe now.</string>
