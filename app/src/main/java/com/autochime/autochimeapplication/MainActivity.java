@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void stopManualRecording() {
         mRecordCheckbox.setText(getString(R.string.not_recording_button));
-        StateMachine.instance().SetState(StateMachine.State.Default);
+        RealButtonEvent.instance().OnPress();
     }
 
     @Override

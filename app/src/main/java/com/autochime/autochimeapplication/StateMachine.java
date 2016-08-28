@@ -1,6 +1,7 @@
 package com.autochime.autochimeapplication;
 
 import android.location.Location;
+import android.media.AudioManager;
 
 import com.autochime.autochimeapplication.database.Database;
 
@@ -97,21 +98,10 @@ public class StateMachine implements
     @Override public void onRealButtonPress() {
         switch (mState) {
             case AutoAlarm:
-                SetState(State.Default);
-                break;
+            case ManualAlarm:
             case PostNotify:
                 SetState(State.Default);
-                if (mLocation != null) {
-                    Database.getInstance().saveRecordingEntry(
-                            mLocation.getLatitude(),
-                            mLocation.getLongitude(),
-                            AudioRecorder.instance().getFileName());
-                } else {
-                    Database.getInstance().saveRecordingEntry(
-                            null,
-                            null,
-                            AudioRecorder.instance().getFileName());
-                }
+                stopCollectingEvidence();
                 break;
             default:
                 break;
@@ -144,6 +134,21 @@ public class StateMachine implements
     private void startCollectingEvidence() {
         AudioRecorder.instance().StartRecord();
         GPSRetriever.instance().getLocation();
+    }
+
+    private void stopCollectingEvidence() {
+        AudioRecorder.instance().StopRecord();
+        if (mLocation != null) {
+            Database.getInstance().saveRecordingEntry(
+                    mLocation.getLatitude(),
+                    mLocation.getLongitude(),
+                    AudioRecorder.instance().getFileName());
+        } else {
+            Database.getInstance().saveRecordingEntry(
+                    null,
+                    null,
+                    AudioRecorder.instance().getFileName());
+        }
     }
 
     // Event Handlers
