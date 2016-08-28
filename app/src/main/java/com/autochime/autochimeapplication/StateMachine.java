@@ -15,7 +15,10 @@ interface TransitionListener {
 /**
  * Created by Wilbur on 08/27/16.
  */
-public class StateMachine implements AutoDetectListener {
+public class StateMachine implements
+        AutoDetectListener,
+        ManualDetectListener
+{
     public enum State {
         Default,
         AutoAlarm,
@@ -28,6 +31,7 @@ public class StateMachine implements AutoDetectListener {
     // All useful members here
     private AudioRecorder mAudioRecorder = null;
     private AutoDetector mAutoDetector = null;
+    private ManualDetector mManualDetector = null;
     private Alarm mAlarm = null;
 
     private static StateMachine mInstance = null;
@@ -51,6 +55,7 @@ public class StateMachine implements AutoDetectListener {
 
     // Event Listeners
     @Override public void onAutoDetectChange(boolean detected) { CheckState(); }
+    @Override public void onManualDetectChange(boolean detected) { SetState(State.ManualAlarm); }
 
     // Event Handlers
     private List<TransitionListener> mListeners = new ArrayList<TransitionListener>();
