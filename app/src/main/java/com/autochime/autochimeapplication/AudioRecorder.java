@@ -7,6 +7,7 @@ import android.util.Log;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.text.DateFormat;
 import java.util.Date;
 
@@ -46,7 +47,13 @@ public class AudioRecorder implements TransitionListener
     }
 
     public void StartRecord() {
-        SoundDetector.instance().Pause();
+        SoundDetector soundDetector = SoundDetector.instance();
+        soundDetector.Pause();
+        while(!soundDetector.IsReady()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {}
+        }
         m_mr = new MediaRecorder();
         m_mr.setAudioSource(MediaRecorder.AudioSource.MIC);
         m_mr.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -65,12 +72,19 @@ public class AudioRecorder implements TransitionListener
             return null;
         try {
             m_mr.stop();
+            m_mr.reset();
             m_mr.release();
         } catch (RuntimeException e) {
             Log.e("AudioRecorder", "StopRecord failed");
         }
         m_mr = null;
         SoundDetector.instance().Start();
+        SoundDetector soundDetector = SoundDetector.instance();
+        while(!soundDetector.IsReady()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {}
+        }
         return m_filename;
     }
 

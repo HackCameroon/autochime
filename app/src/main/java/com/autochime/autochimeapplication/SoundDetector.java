@@ -20,6 +20,7 @@ interface SoundListener {
  */
 public class SoundDetector implements Runnable {
     private boolean isRecording = false;
+    private boolean isReallyRecording = false;
 
     private static SoundDetector mInstance = null;
     public static SoundDetector instance() {
@@ -34,13 +35,15 @@ public class SoundDetector implements Runnable {
     public void OnDetect() { for (SoundListener listener : mListeners) listener.onSoundDetected(); }
 
     public void Start() {
-        Log.d("SOUND", "START");
         isRecording = true;
     }
 
     public void Pause() {
-        Log.d("SOUND", "PAUSE");
         isRecording = false;
+    }
+
+    public boolean IsReady() {
+        return isRecording == isReallyRecording;
     }
 
     String str(double value) {
@@ -77,14 +80,18 @@ public class SoundDetector implements Runnable {
             recorder = new AudioRecord(MediaRecorder.AudioSource.MIC, iSampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
             while (true) {
                 if (isRecording) {
-                    if (recorder.getRecordingState() == AudioRecord.RECORDSTATE_STOPPED)
+                    if (recorder.getRecordingState() == AudioRecord.RECORDSTATE_STOPPED) {
+                        isReallyRecording = true;
                         recorder.startRecording();
+                    }
                     short[] buffer = buffers[ix++ % buffers.length];
                     bufferSize = recorder.read(buffer, 0, buffer.length);
                     Process(buffer);
                 } else {
-                    if (recorder.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING)
+                    if (recorder.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING) {
                         recorder.stop();
+                        isReallyRecording = false;
+                    }
                 }
             }
         } catch (Throwable x) {
