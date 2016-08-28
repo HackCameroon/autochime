@@ -20,7 +20,6 @@ public class RealButtonEvent {
     RealButtonEvent() {};
 
     private List<RealButtonListener> mListeners = new ArrayList<RealButtonListener>();
-    public void addListener(RealButtonListener listener) { mListeners.add(listener); }
     public void OnPress() {
         for (RealButtonListener listener : mListeners) {
             listener.onRealButtonPress();

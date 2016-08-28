@@ -22,7 +22,6 @@ public class Timer implements TransitionListener {
     Timer() {}
 
     private List<TimerListener> mListeners = new ArrayList<TimerListener>();
-    public void addListener(TimerListener listener) { mListeners.add(listener); }
     private void OnExpire() {
         for (TimerListener listener : mListeners) {
             listener.onTimerExpire();
