@@ -38,10 +38,7 @@ public class StateMachine implements
         ManualDetector.instance().addListener(this);
         RealButtonEvent.instance().addListener(this);
         FakeButtonEvent.instance().addListener(this);
-
         Timer.instance().addListener(this);
-        Alarm.instance();
-        AudioRecorder.instance();
 
         SetState(State.Default);
     }
@@ -49,8 +46,16 @@ public class StateMachine implements
     // Allow specific setting of States
     public void SetState(final State newState) {
         Transition(newState);
-        if (newState == State.Notify)
-            SetState(State.PostNotify);
+        switch (newState) {
+            case AutoAlarm:
+                Timer.instance().Start(5000);
+                break;
+            case Notify:
+                SetState(State.PostNotify);
+                break;
+            default:
+                break;
+        }
     }
 
     // Event Listeners
