@@ -11,6 +11,11 @@ html,body{
 	font-family: 'PT Sans', sans-serif;
 	background:#f6f6f6;
 }
+#player {
+ width: 100%;
+
+}​
+
 body a{
     transition:0.5s all;
 	-webkit-transition:0.5s all;
@@ -344,7 +349,7 @@ position:relative;
 .reservation ul li {
   float: left;
   list-style: none;
-  width: 33%;
+  width: 50%;
 }
 /* start booking_room */
 .online_reservation{
@@ -867,7 +872,7 @@ div.register-bottom-grid {
   padding: 0;
 }
 .error-404 p {
-  color: #9cbd12;
+  color: #FF9B0D;
   margin: 0;
   font-size: 1.2em;
   font-weight: 600;

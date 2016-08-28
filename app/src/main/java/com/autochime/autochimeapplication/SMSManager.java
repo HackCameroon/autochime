@@ -22,8 +22,8 @@ public class SMSManager {
 
         dummyPhoneNo = "5554"; // first emulator
         dummyPhoneNo2 = "5556"; // second emulator
-        dummyMessageBody = "Your friend Kelly may be in danger -  listen to this recording from her phone. https://rec.autochime.com/c3a564b6. Location: <27.1960, 78.0212>. <If you think she is in danger, click here to send her help. If you think she is fine, ignore this message.";
-        dummyDownloadBody = "<Download audio>";
+        dummyMessageBody = "Your friend Kelly may be in danger. Please review: https://rec.autochime.com/c3a564b6. Location: <37.772533, -122.444014> near Panhandle. Reply 'HELP' to send her help.";
+        dummyDownloadBody = "Review this recording from her phone: <Download audio>";
     }
 
     public void sendHardcode() {
