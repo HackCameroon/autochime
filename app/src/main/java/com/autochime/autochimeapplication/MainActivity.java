@@ -1,10 +1,23 @@
 package com.autochime.autochimeapplication;
 
+import android.Manifest;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
+
+import com.autochime.autochimeapplication.R;
 
 public class MainActivity extends AppCompatActivity {
     CheckBox mRecordCheckbox;
@@ -13,8 +26,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         StateMachine stateMachine = StateMachine.instance();
+        Alarm.instance();
+        AudioRecorder.instance();
+        GPSRetriever.instance();
+    }
 
         // just testing
 //        SMSManager smsManager = new SMSManager();
@@ -36,7 +52,10 @@ public class MainActivity extends AppCompatActivity {
 //        FragmentTransaction ft = getFragmentManager().beginTransaction();
 //        ft.add(AddContactFragment.newInstance(), null);
 //        ft.commit();
-    }
+//
+//        t = (TextView) findViewById(R.id.textView);
+//        b = (Button) findViewById(R.id.button);
+//
 
     public void startManualRecording() {
         // user instantiated recording

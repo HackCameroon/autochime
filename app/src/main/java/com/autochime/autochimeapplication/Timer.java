@@ -12,34 +12,18 @@ interface TimerListener {
 /**
  * Created by Wilbur on 08/28/16.
  */
-public class Timer implements TransitionListener {
+public class Timer {
     private static Timer mInstance = null;
     public static Timer instance() {
         if (mInstance == null)
             mInstance = new Timer();
         return mInstance;
     }
-    Timer() {
-        StateMachine.instance().addListener(this);
-    }
+    Timer() {}
 
     private List<TimerListener> mListeners = new ArrayList<TimerListener>();
     public void addListener(TimerListener listener) { mListeners.add(listener); }
-    private void OnExpire() {
-        for (TimerListener listener : mListeners) {
-            listener.onTimerExpire();
-        }
-    }
-
-    @Override public void onTransition(StateMachine.State state) {
-        switch (state) {
-            case AutoAlarm:
-                Start(5000); // 5 second
-                break;
-            default:
-                break;
-        }
-    }
+    private void OnExpire() { for (TimerListener listener : mListeners) listener.onTimerExpire(); }
 
     public void Start(int milliseconds) {
         Handler handler = new Handler();
