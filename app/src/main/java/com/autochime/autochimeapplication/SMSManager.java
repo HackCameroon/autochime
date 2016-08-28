@@ -32,7 +32,7 @@ public class SMSManager {
         testPhoneNo = "15103095525";
         testPhoneNo2 = "16282287530";
 
-        dummyMessageBody = "Your friend Wanda may be in danger. Please review: http://autochime.imtiana.com/ Location: 37.772533, -122.444014 near Facebook HQ, Menlo Park, CA. Reply 'HELP' to send her help.";
+        dummyMessageBody = "Wanda may be in danger. Please review: http://autochime.imtiana.com/ Location: 37.772533, -122.444014 near Facebook HQ, Menlo Park, CA. Reply 'HELP' to send her help.";
         dummyDownloadBody = "Review this recording from her phone: <Download audio>";
     }
 
