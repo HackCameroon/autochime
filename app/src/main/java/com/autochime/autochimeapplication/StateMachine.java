@@ -12,7 +12,9 @@ interface TransitionListener {
  */
 public class StateMachine implements
         AutoDetectListener,
-        ManualDetectListener
+        ManualDetectListener,
+        RealButtonListener,
+        FakeButtonListener
 {
     public enum State {
         Default,
@@ -23,12 +25,6 @@ public class StateMachine implements
     }
     private State mState = State.Default;
 
-    // All useful members here
-    private AudioRecorder mAudioRecorder = null;
-    private AutoDetector mAutoDetector = null;
-    private ManualDetector mManualDetector = null;
-    private Alarm mAlarm = null;
-
     private static StateMachine mInstance = null;
     public static StateMachine instance() {
         if (mInstance == null)
@@ -37,58 +33,36 @@ public class StateMachine implements
     }
     StateMachine() {
         // Initialize all members here
-        mAudioRecorder = AudioRecorder.instance();
-        mAutoDetector = AutoDetector.instance();
-        mAlarm = Alarm.instance();
-        //Transition(State.Default);
+        AutoDetector.instance();
+        ManualDetector.instance();
+        RealButtonEvent.instance();
+        FakeButtonEvent.instance();
+        SetState(State.Default);
     }
 
     // Allow specific setting of States
     public void SetState(final State newState) {
         Transition(newState);
+        if (newState == State.Notify)
+            SetState(State.PostNotify);
     }
 
     // Event Listeners
     @Override public void onAutoDetectChange(boolean detected) { CheckState(); }
     @Override public void onManualDetectChange(boolean detected) { SetState(State.ManualAlarm); }
+    @Override public void onRealButtonPress() {};
+    @Override public void onFakeButtonPress() {};
 
     // Event Handlers
     private List<TransitionListener> mListeners = new ArrayList<TransitionListener>();
     public void addListener(TransitionListener listener) {
         mListeners.add(listener);
     }
-    private void OnTransition() {
+    private void Transition(final State newState) {
+        mState = newState;
         for (TransitionListener listener : mListeners) {
             listener.onTransition(mState);
         }
-    }
-
-    // Toggle specific behaviors at transition
-    private void Transition(final State newState) {
-        mState = newState;
-        switch (mState) {
-            case Default:
-                if (mAudioRecorder != null) mAudioRecorder.StopRecord();
-                if (mAlarm != null) mAlarm.SetState(false);
-                break;
-            case AutoAlarm:
-                mAudioRecorder.StartRecord();
-                mAlarm.SetState(true);
-                break;
-            case ManualAlarm:
-                mAudioRecorder.StartRecord();
-                mAlarm.SetState(false);
-                break;
-            case Notify:
-                Transition(State.PostNotify);
-                break;
-            case PostNotify:
-                mAlarm.SetState(false);
-                break;
-            default:
-                break;
-        }
-        OnTransition();
     }
 
     private void CheckState() {

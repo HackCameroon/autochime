@@ -1,5 +1,6 @@
 package com.autochime.autochimeapplication;
 
+import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -32,8 +33,9 @@ public class AutoDetector implements SensorEventListener {
         return mInstance;
     }
     AutoDetector() {
-        //mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-        //mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_NORMAL);
+        Context context = AutoChimeApplication.getAppContext();
+        mSensorManager = (SensorManager)context.getSystemService(context.SENSOR_SERVICE);
+        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_NORMAL);
     }
 
     private List<AutoDetectListener> mListeners = new ArrayList<AutoDetectListener>();

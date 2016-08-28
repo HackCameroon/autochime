@@ -13,7 +13,8 @@ import java.io.IOException;
 /**
  * Created by Wilbur on 08/27/16.
  */
-public class AudioRecorder {
+public class AudioRecorder implements TransitionListener
+{
     private MediaRecorder m_mr = null;
     private MediaPlayer m_mp = null;
     private String m_filename = null;
@@ -27,6 +28,26 @@ public class AudioRecorder {
     AudioRecorder() {
         m_filename = Environment.getExternalStorageDirectory().getAbsolutePath();
         m_filename += "/audio.3gp";
+    }
+
+    @Override public void onTransition(StateMachine.State state) {
+        switch (state) {
+            case Default:
+                StopRecord();
+                break;
+            case AutoAlarm:
+                StartRecord();
+                break;
+            case ManualAlarm:
+                StartRecord();
+                break;
+            case Notify:
+                break;
+            case PostNotify:
+                break;
+            default:
+                break;
+        }
     }
 
     public void StartRecord() {
