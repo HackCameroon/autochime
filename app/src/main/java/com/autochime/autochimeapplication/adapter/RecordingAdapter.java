@@ -38,8 +38,4 @@ public class RecordingAdapter extends CursorAdapter {
         latitudeView.setText(String.valueOf(lat));
         longitudeView.setText(String.valueOf(lon));
     }
-
-    public String getRecordFileName() {
-        return mRecordFileName;
-    }
 }
