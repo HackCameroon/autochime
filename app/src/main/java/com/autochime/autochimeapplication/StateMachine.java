@@ -1,10 +1,5 @@
 package com.autochime.autochimeapplication;
 
-import android.app.Activity;
-import android.content.Context;
-import android.os.Bundle;
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
