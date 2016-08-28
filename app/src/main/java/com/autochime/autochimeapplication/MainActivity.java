@@ -1,23 +1,14 @@
 package com.autochime.autochimeapplication;
 
-import android.Manifest;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.support.v4.app.ActivityCompat;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
-import com.autochime.autochimeapplication.R;
+import android.support.v7.widget.Toolbar;
+import android.widget.CompoundButton;
 
 public class MainActivity extends AppCompatActivity {
     CheckBox mRecordCheckbox;
@@ -30,23 +21,25 @@ public class MainActivity extends AppCompatActivity {
         Alarm.instance();
         AudioRecorder.instance();
         GPSRetriever.instance();
-    }
+
+        Toolbar mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
+        setSupportActionBar(mainToolbar);
 
         // just testing
 //        SMSManager smsManager = new SMSManager();
 //        smsManager.sendHardcode();
-//
-//        mRecordCheckbox = (CheckBox) findViewById(R.id.main_record_button);
-//        mRecordCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-//            @Override
-//            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-//                if (isChecked) {
-//                    startManualRecording();
-//                } else {
-//                    stopManualRecording();
-//                }
-//            }
-//        });
+
+        mRecordCheckbox = (CheckBox) findViewById(R.id.main_record_button);
+        mRecordCheckbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    startManualRecording();
+                } else {
+                    stopManualRecording();
+                }
+            }
+        });
 
         // Show contact selector
 //        FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -56,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 //        t = (TextView) findViewById(R.id.textView);
 //        b = (Button) findViewById(R.id.button);
 //
+    }
 
     public void startManualRecording() {
         // user instantiated recording
@@ -64,5 +58,26 @@ public class MainActivity extends AppCompatActivity {
 
     private void stopManualRecording() {
         mRecordCheckbox.setText(getString(R.string.not_recording_button));
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.action_bar, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_history:
+                Intent intent = new Intent(this, HistoryActivity.class);
+                startActivity(intent);
+                return true;
+
+            default:
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 }

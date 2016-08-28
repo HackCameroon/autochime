@@ -1,5 +1,7 @@
 package com.autochime.autochimeapplication;
 
+import com.autochime.autochimeapplication.database.Database;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,8 +84,14 @@ public class StateMachine implements
     @Override public void onRealButtonPress() {
         switch (mState) {
             case AutoAlarm:
+                SetState(State.Default);
+                break;
             case PostNotify:
                 SetState(State.Default);
+                Database.getInstance().saveRecordingEntry(
+                        123.123,
+                        467.324,
+                        AudioRecorder.instance().getFileName());
                 break;
             default:
                 break;

@@ -5,11 +5,11 @@ import android.media.MediaRecorder;
 import android.os.Environment;
 import android.util.Log;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.text.DateFormat;
+import java.util.Date;
 
-/**
- * Created by Wilbur on 08/27/16.
- */
 public class AudioRecorder implements TransitionListener
 {
     private MediaRecorder m_mr = null;
@@ -25,7 +25,13 @@ public class AudioRecorder implements TransitionListener
     AudioRecorder() {
         StateMachine.instance().addListener(this);
         m_filename = Environment.getExternalStorageDirectory().getAbsolutePath();
-        m_filename += "/audio.3gp";
+        m_filename += "/audio-" +
+                      DateFormat.getDateTimeInstance().format(new Date()).replaceAll(":", "-") +
+                      ".3gp";
+    }
+
+    public String getFileName() {
+        return m_filename;
     }
 
     @Override public void onTransition(StateMachine.State state) {
@@ -53,9 +59,9 @@ public class AudioRecorder implements TransitionListener
         m_mr.start();
     }
 
-    public void StopRecord() {
+    public String StopRecord() {
         if (m_mr == null)
-            return;
+            return null;
         try {
             m_mr.stop();
             m_mr.release();
@@ -63,16 +69,25 @@ public class AudioRecorder implements TransitionListener
             Log.e("AudioRecorder", "StopRecord failed");
         }
         m_mr = null;
+        return m_filename;
     }
 
-    public void StartPlayback() {
-        m_mp = new MediaPlayer();
+    public void StartPlayback(String fileName) {
+        MediaPlayer mp = new MediaPlayer();
         try {
-            m_mp.setDataSource(m_filename);
-            m_mp.prepare();
-            m_mp.start();
+            FileInputStream fileInputStream = new FileInputStream(fileName);
+            mp.setDataSource(fileInputStream.getFD());
+            mp.prepare();
+            mp.start();
+            mp.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mp.release();
+                }
+            });
         } catch (IOException e) {
             Log.e("AudioRecorder", "StartPlayback failed");
+            mp.release();
         }
     }
 
