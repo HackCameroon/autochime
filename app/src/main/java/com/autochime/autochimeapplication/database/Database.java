@@ -55,7 +55,7 @@ public class Database extends SQLiteOpenHelper {
         onUpgrade(db, oldVersion, newVersion);
     }
 
-    public void saveRecordingEntry(double latitude, double longitude, String file_name) {
+    public void saveRecordingEntry(Double latitude, Double longitude, String file_name) {
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
         values.put(ViolenceRecording.RecordEntry.COLUMN_NAME_LONGITUDE, longitude);

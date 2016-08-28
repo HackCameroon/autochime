@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        StateMachine stateMachine = StateMachine.instance();
+        StateMachine.instance();
         Alarm.instance();
         AudioRecorder.instance();
         GPSRetriever.instance();
@@ -52,12 +52,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void startManualRecording() {
-        // user instantiated recording
         mRecordCheckbox.setText(getString(R.string.recording_button));
+        ManualDetector.instance().OnDetectChange(true);
     }
 
     private void stopManualRecording() {
         mRecordCheckbox.setText(getString(R.string.not_recording_button));
+        StateMachine.instance().SetState(StateMachine.State.Default);
     }
 
     @Override

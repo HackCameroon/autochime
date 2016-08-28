@@ -1,5 +1,7 @@
 package com.autochime.autochimeapplication;
 
+import android.location.Location;
+
 import com.autochime.autochimeapplication.database.Database;
 
 import java.util.ArrayList;
@@ -17,7 +19,8 @@ public class StateMachine implements
         ManualDetectListener,
         RealButtonListener,
         FakeButtonListener,
-        TimerListener
+        TimerListener,
+        GPSListener
 {
     public enum State {
         Default,
@@ -27,6 +30,8 @@ public class StateMachine implements
         PostNotify
     }
     private State mState = State.Default;
+
+    private Location mLocation;
 
     private static StateMachine mInstance = null;
     public static StateMachine instance() {
@@ -41,6 +46,8 @@ public class StateMachine implements
         RealButtonEvent.instance().addListener(this);
         FakeButtonEvent.instance().addListener(this);
         Timer.instance().addListener(this);
+        GPSRetriever.instance().addListener(this);
+
         SetState(State.Default);
     }
 
@@ -66,7 +73,10 @@ public class StateMachine implements
     @Override public void onAutoDetectChange(boolean detected) {
         switch (mState) {
             case Default:
-                if (detected) SetState(State.AutoAlarm);
+                if (detected) {
+                    startCollectingEvidence();
+                    SetState(State.AutoAlarm);
+                }
                 break;
             default:
                 break;
@@ -75,7 +85,10 @@ public class StateMachine implements
     @Override public void onManualDetectChange(boolean detected) {
         switch(mState) {
             case Default:
-                if (detected) SetState(State.ManualAlarm);
+                if (detected) {
+                    startCollectingEvidence();
+                    SetState(State.ManualAlarm);
+                }
                 break;
             default:
                 break;
@@ -88,15 +101,22 @@ public class StateMachine implements
                 break;
             case PostNotify:
                 SetState(State.Default);
-                Database.getInstance().saveRecordingEntry(
-                        123.123,
-                        467.324,
-                        AudioRecorder.instance().getFileName());
+                if (mLocation != null) {
+                    Database.getInstance().saveRecordingEntry(
+                            mLocation.getLatitude(),
+                            mLocation.getLongitude(),
+                            AudioRecorder.instance().getFileName());
+                } else {
+                    Database.getInstance().saveRecordingEntry(
+                            null,
+                            null,
+                            AudioRecorder.instance().getFileName());
+                }
                 break;
             default:
                 break;
         }
-    };
+    }
     @Override public void onFakeButtonPress() {
         switch (mState) {
             case AutoAlarm:
@@ -105,7 +125,7 @@ public class StateMachine implements
             default:
                 break;
         }
-    };
+    }
     @Override public void onTimerExpire() {
         switch (mState) {
             case AutoAlarm:
@@ -114,6 +134,16 @@ public class StateMachine implements
             default:
                 break;
         }
+    }
+
+    @Override
+    public void onGPSUpdate(Location location) {
+        mLocation = location;
+    }
+
+    private void startCollectingEvidence() {
+        AudioRecorder.instance().StartRecord();
+        GPSRetriever.instance().getLocation();
     }
 
     // Event Handlers
