@@ -1,75 +1,66 @@
 package com.autochime.autochimeapplication;
 
-class StateEventListener {
-    public void onDefault() {};
-    public void onAutoAlarm() {};
-    public void onManualAlarm() {};
-    public void onNotify() {};
-    public void onPostNotify() {};
+import java.util.ArrayList;
+import java.util.List;
+
+enum State {
+    Default,
+    AutoAlarm,
+    ManualAlarm,
+    Notify,
+    PostNotify
+}
+
+interface TransitionListener {
+    void onTransition(State state);
 }
 
 /**
  * Created by Wilbur on 08/27/16.
  */
 public class StateMachine {
-    enum State extends StateEventListener {
-        Default {
-            @Override public void onDefault() {}
-            @Override public void onAutoAlarm() {}
-            @Override public void onManualAlarm() {}
-            @Override public void onNotify() {}
-            @Override public void onPostNotify() {}
-        },
-        AutoAlarm {
-            @Override public void onDefault() {}
-            @Override public void onAutoAlarm() {}
-            @Override public void onManualAlarm() {}
-            @Override public void onNotify() {}
-            @Override public void onPostNotify() {}
-        },
-        ManualAlarm {
-            @Override public void onDefault() {}
-            @Override public void onAutoAlarm() {}
-            @Override public void onManualAlarm() {}
-            @Override public void onNotify() {}
-            @Override public void onPostNotify() {}
-        },
-        Notify {
-            @Override public void onDefault() {}
-            @Override public void onAutoAlarm() {}
-            @Override public void onManualAlarm() {}
-            @Override public void onNotify() {}
-            @Override public void onPostNotify() {}
-        },
-        PostNotify {
-            @Override public void onDefault() {}
-            @Override public void onAutoAlarm() {}
-            @Override public void onManualAlarm() {}
-            @Override public void onNotify() {}
-            @Override public void onPostNotify() {}
-        }
-    }
-    private State mState;
+    private State mState = State.Default;
+
+    private AudioRecorder mAudioRecorder = null;
 
     public StateMachine() {
-        mState = State.Default;
+        mAudioRecorder = new AudioRecorder();
+    }
+
+    private List<TransitionListener> mListeners = new ArrayList<TransitionListener>();
+    public void addTransitionListener(TransitionListener listener) {
+        mListeners.add(listener);
+    }
+    private void OnTransition() {
+        for (TransitionListener listener : mListeners) {
+            listener.onTransition(mState);
+        }
     }
 
     private void Transition(final State newState) {
         mState = newState;
-        switch(mState) {
+        switch (mState) {
             case Default:
+                mAudioRecorder.StopRecord();
                 break;
             case AutoAlarm:
+                mAudioRecorder.StartRecord();
                 break;
             case ManualAlarm:
+                mAudioRecorder.StartRecord();
                 break;
             case Notify:
+                Transition(State.PostNotify);
                 break;
             case PostNotify:
                 break;
             default:
-                throw new IllegalArgumentException();
+                break;
         }
+        OnTransition();
+    }
+
+    private void CheckState() {
+
     }
 }
