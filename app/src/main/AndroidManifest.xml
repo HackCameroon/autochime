@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.autochime.autochime"
+<manifest package="com.autochime.autochimeapplication"
           xmlns:android="http://schemas.android.com/apk/res/android">
-  <uses-sdk android:minSdkVersion="16"
-            android:targetSdkVersion="23"/>
 
   <application
     android:allowBackup="true"
