@@ -1,3 +1,4 @@
 <resources>
   <string name="app_name">AutoChimeApplication</string>
+  <string name="resume">Location</string>
 </resources>
