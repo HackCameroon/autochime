@@ -2,6 +2,8 @@
 <manifest package="com.autochime.autochimeapplication"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+  <uses-permission android:name="android.permission.RECORD_AUDIO" />
+  <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
   <uses-sdk android:minSdkVersion="16"
             android:targetSdkVersion="22"
             android:maxSdkVersion="22"/>
