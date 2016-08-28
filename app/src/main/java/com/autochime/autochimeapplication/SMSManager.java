@@ -13,7 +13,10 @@ public class SMSManager {
 
     private String dummyPhoneNo = null;
     private String dummyPhoneNo2 = null;
+
     private String testPhoneNo = null;
+    private String testPhoneNo2 = null;
+
 
     private String dummyMessageBody = null;
     private String dummyDownloadBody = null;
@@ -26,7 +29,8 @@ public class SMSManager {
 
         dummyPhoneNo = "5554"; // first emulator
         dummyPhoneNo2 = "5556"; // second emulator
-        testPhoneNo = "17476667469";
+        testPhoneNo = "15103095525";
+        testPhoneNo2 = "16282287530";
 
         dummyMessageBody = "Your friend Wanda may be in danger. Please review: http://autochime.imtiana.com/ Location: 37.772533, -122.444014 near Facebook HQ, Menlo Park, CA. Reply 'HELP' to send her help.";
         dummyDownloadBody = "Review this recording from her phone: <Download audio>";
@@ -44,7 +48,11 @@ public class SMSManager {
             ArrayList<String> parts = smsManager.divideMessage(dummyMessageBody);
 
             smsManager.sendMultipartTextMessage(testPhoneNo, null, parts, null, null);
+            smsManager.sendMultipartTextMessage(testPhoneNo2, null, parts, null, null);
+
             smsManager.sendTextMessage(testPhoneNo, null, dummyDownloadBody, null, null);
+            smsManager.sendTextMessage(testPhoneNo2, null, dummyDownloadBody, null, null);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
