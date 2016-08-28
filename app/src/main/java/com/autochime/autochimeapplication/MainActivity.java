@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CheckBox;
 import android.support.v7.app.AppCompatActivity;
 
@@ -80,5 +81,13 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    public void onClickFakeBtn(View v) {
+        FakeButtonEvent.instance().OnPress();
+    }
+
+    public void onClickRealBtn(View v) {
+        RealButtonEvent.instance().OnPress();
     }
 }
