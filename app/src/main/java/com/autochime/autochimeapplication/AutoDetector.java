@@ -24,8 +24,10 @@ interface AutoDetectListener {
  * <p/>
  * 3. to stop Fake ring tone, call mViolentDetector.mute();
  */
-public class AutoDetector implements SensorEventListener {
+public class AutoDetector implements MotionListener, SoundListener {
     SensorManager mSensorManager = null;
+
+
 
     private static AutoDetector mInstance = null;
     public static AutoDetector instance() {
@@ -34,9 +36,32 @@ public class AutoDetector implements SensorEventListener {
         return mInstance;
     }
     AutoDetector() {
-        Context context = AutoChimeApplication.getAppContext();
-        mSensorManager = (SensorManager)context.getSystemService(context.SENSOR_SERVICE);
-        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),SensorManager.SENSOR_DELAY_NORMAL);
+        MotionDetector.instance().addListener(this);
+    }
+
+    long mMotion = 0;
+    long mPrevMotionTime = 0;
+    long mSound = 0;
+    long mPrevSoundTime = 0;
+
+    @Override public void onMotionChange(boolean detected) {
+        long currTime = System.currentTimeMillis();
+        mMotion = (currTime - mPrevMotionTime) / 2 + mMotion / 2;
+        mPrevMotionTime  = currTime;
+        CheckTotal();
+    }
+    @Override public void onSoundDetected() {
+        long currTime = System.currentTimeMillis();
+        mSound = (currTime - mPrevSoundTime) / 2 + mSound / 2;
+        mPrevSoundTime = currTime;
+        CheckTotal();
+    }
+
+    private void CheckTotal() {
+        if (mPrevMotionTime == 0 || mPrevSoundTime == 0)
+            return;
+        long check = mSound + mMotion;
+        Log.d("ASD", Long.toString(check));
     }
 
     boolean mIsDetected = false;
@@ -49,59 +74,4 @@ public class AutoDetector implements SensorEventListener {
         }
     }
     public boolean IsDetected() { return mIsDetected; }
-
-
-    private float mAccel = 0; // acceleration apart from gravity
-    private float mAccelCurrent = SensorManager.GRAVITY_EARTH; // current
-    // acceleration
-    // including
-    // gravity
-    private float mAccelLast = SensorManager.GRAVITY_EARTH; // last
-    // acceleration
-    // including
-    // gravity
-
-    @Override
-    public void onSensorChanged(SensorEvent se) {
-        final long shs = 10;
-
-        float x = se.values[0];
-        float y = se.values[1];
-        float z = se.values[2];
-        // M.l("x=" + x + " y=" + y + " z=" + z);
-        mAccelLast = mAccelCurrent;
-        mAccelCurrent = (float) Math.sqrt((double) (x * x + y * y));
-        // mAccelCurrent = (float) Math.sqrt((double) (x * x + y * y + z
-        // * z));
-        float delta = mAccelCurrent - mAccelLast;
-        mAccel = mAccel * 0.9f + delta; // perform low-cut filter
-        // if (mAccel * shs > 5 * 20) {
-        if (mAccel * shs > 10 * 20) {
-            if (!mIsDetected)
-                OnDetectChange(true);
-//					M.l("x=" + x + " y=" + y + " z=" + z);
-//					M.l("mAccel=" + mAccel + " mAccelLast=" + mAccelLast
-//							+ " mAccelCurrent=" + mAccelCurrent);
-
-//					final SoundMeter sm = new SoundMeter();
-//					sm.start();
-//					final Handler handler = new Handler();
-//					handler.postDelayed(new Runnable() {
-//						@Override
-//						public void run() {
-//							if (sm.getAmplitude()> certainValue)
-//								mFakeRingtone.play();
-//							sm.stop();
-//						}
-//					}, 100);
-
-
-        } else {
-            if (mIsDetected)
-                OnDetectChange(false);
-        }
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 }

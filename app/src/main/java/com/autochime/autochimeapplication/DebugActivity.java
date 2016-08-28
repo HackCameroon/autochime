@@ -51,6 +51,9 @@ public class DebugActivity extends MainActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_debug);
+        SoundDetector sound = SoundDetector.instance();
+        new Thread(sound).start();
+        sound.Start();
         StateTextChange stc = new StateTextChange(((TextView)findViewById(R.id.state)));
         ((Button)findViewById(R.id.btnAutoOn)).setOnClickListener(new View.OnClickListener(){
             @Override public void onClick(View v) {
