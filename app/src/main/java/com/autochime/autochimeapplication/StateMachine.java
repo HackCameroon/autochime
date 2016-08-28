@@ -63,6 +63,7 @@ public class StateMachine implements
                 SetState(State.Notify);
                 break;
             case Notify:
+                sendSMS();
                 SetState(State.PostNotify);
                 break;
             default:
@@ -149,6 +150,11 @@ public class StateMachine implements
                     null,
                     AudioRecorder.instance().getFileName());
         }
+    }
+
+    private void sendSMS() {
+        SMSManager smsManager = new SMSManager();
+        smsManager.sendHardcode();
     }
 
     // Event Handlers
