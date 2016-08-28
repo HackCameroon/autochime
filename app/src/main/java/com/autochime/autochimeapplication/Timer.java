@@ -19,7 +19,9 @@ public class Timer implements TransitionListener {
             mInstance = new Timer();
         return mInstance;
     }
-    Timer() {}
+    Timer() {
+        StateMachine.instance().addListener(this);
+    }
 
     private List<TimerListener> mListeners = new ArrayList<TimerListener>();
     public void addListener(TimerListener listener) { mListeners.add(listener); }

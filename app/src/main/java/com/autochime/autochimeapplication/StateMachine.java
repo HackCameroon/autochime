@@ -34,13 +34,14 @@ public class StateMachine implements
     }
     StateMachine() {
         // Initialize all singletons here
-        AutoDetector.instance();
-        ManualDetector.instance();
-        RealButtonEvent.instance();
-        FakeButtonEvent.instance();
+        AutoDetector.instance().addListener(this);
+        ManualDetector.instance().addListener(this);
+        RealButtonEvent.instance().addListener(this);
+        FakeButtonEvent.instance().addListener(this);
+
+        Timer.instance().addListener(this);
         Alarm.instance();
         AudioRecorder.instance();
-        Timer.instance();
 
         SetState(State.Default);
     }
@@ -109,13 +110,6 @@ public class StateMachine implements
         mState = newState;
         for (TransitionListener listener : mListeners) {
             listener.onTransition(mState);
-        }
-    }
-
-    private void CheckState() {
-        switch (mState) {
-            default:
-                break;
         }
     }
 }
