@@ -20,6 +20,7 @@ public class ManualDetector {
 
     private boolean mIsDetected;
     private List<ManualDetectListener> mListeners = new ArrayList<ManualDetectListener>();
+    public void addListener(ManualDetectListener listener) { mListeners.add(listener); }
     public void OnDetectChange(boolean detected) {
         mIsDetected = detected;
         for (ManualDetectListener listener : mListeners) {
