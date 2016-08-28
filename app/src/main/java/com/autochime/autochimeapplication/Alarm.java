@@ -19,6 +19,7 @@ public class Alarm implements TransitionListener
     }
 
     Alarm() {
+        StateMachine.instance().addListener(this);
         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         mMp = MediaPlayer.create(AutoChimeApplication.getAppContext(), notification);
     }

@@ -23,6 +23,7 @@ public class AudioRecorder implements TransitionListener
         return mInstance;
     }
     AudioRecorder() {
+        StateMachine.instance().addListener(this);
         m_filename = Environment.getExternalStorageDirectory().getAbsolutePath();
         m_filename += "/audio.3gp";
     }
