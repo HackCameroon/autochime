@@ -2,6 +2,10 @@
 <manifest package="com.autochime.autochimeapplication"
           xmlns:android="http://schemas.android.com/apk/res/android">
 
+  <uses-sdk android:minSdkVersion="16"
+            android:targetSdkVersion="22"
+            android:maxSdkVersion="22"/>
+
   <application
     android:allowBackup="true"
     android:icon="@mipmap/ic_launcher"
@@ -16,5 +20,7 @@
       </intent-filter>
     </activity>
   </application>
+
+  <uses-permission android:name="android.permission.READ_CONTACTS" />
 
 </manifest>
