@@ -48,6 +48,9 @@ public class StateMachine implements
         FakeButtonEvent.instance().addListener(this);
         Timer.instance().addListener(this);
         GPSRetriever.instance().addListener(this);
+        SoundDetector sound = SoundDetector.instance();
+        new Thread(sound).start();
+        sound.Start();
 
         SetState(State.Default);
     }

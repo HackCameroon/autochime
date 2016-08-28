@@ -37,22 +37,37 @@ public class AutoDetector implements MotionListener, SoundListener {
     }
     AutoDetector() {
         MotionDetector.instance().addListener(this);
+        SoundDetector.instance().addListener(this);
     }
 
+    long mMaxValue = 500;
     long mMotion = 0;
     long mPrevMotionTime = 0;
     long mSound = 0;
     long mPrevSoundTime = 0;
+    float timeDelta = 0.85f;
 
     @Override public void onMotionChange(boolean detected) {
         long currTime = System.currentTimeMillis();
-        mMotion = (currTime - mPrevMotionTime) / 2 + mMotion / 2;
+        if (mPrevMotionTime == 0) {
+            mPrevMotionTime = currTime;
+            mMotion = mMaxValue;
+            return;
+        }
+        mMotion = (long)((float)(currTime - mPrevMotionTime) * (1.0f - timeDelta) + (float)mMotion * timeDelta);
+        if (mMotion > mMaxValue) mMotion = mMaxValue;
         mPrevMotionTime  = currTime;
         CheckTotal();
     }
     @Override public void onSoundDetected() {
         long currTime = System.currentTimeMillis();
-        mSound = (currTime - mPrevSoundTime) / 2 + mSound / 2;
+        if (mPrevSoundTime == 0) {
+            mPrevSoundTime = currTime;
+            mSound = mMaxValue;
+            return;
+        }
+        mSound = (long)((float)(currTime - mPrevSoundTime) * (1.0f - timeDelta) + (float)mSound * timeDelta);
+        if (mSound > mMaxValue) mSound = mMaxValue;
         mPrevSoundTime = currTime;
         CheckTotal();
     }
@@ -61,7 +76,9 @@ public class AutoDetector implements MotionListener, SoundListener {
         if (mPrevMotionTime == 0 || mPrevSoundTime == 0)
             return;
         long check = mSound + mMotion;
-        Log.d("ASD", Long.toString(check));
+        if (check < 350) {
+            OnDetectChange(true);
+        }
     }
 
     boolean mIsDetected = false;

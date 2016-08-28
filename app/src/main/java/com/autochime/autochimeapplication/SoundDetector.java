@@ -34,10 +34,12 @@ public class SoundDetector implements Runnable {
     public void OnDetect() { for (SoundListener listener : mListeners) listener.onSoundDetected(); }
 
     public void Start() {
+        Log.d("SOUND", "START");
         isRecording = true;
     }
 
     public void Pause() {
+        Log.d("SOUND", "PAUSE");
         isRecording = false;
     }
 
@@ -58,7 +60,7 @@ public class SoundDetector implements Runnable {
         for(int i = 0; i < bufferD.length; ++i) {
             total += Math.abs(bufferD[i] * i * i);
         }
-        if (total > 2000000) {
+        if (total > 1000000) {
             OnDetect();
         }
     }

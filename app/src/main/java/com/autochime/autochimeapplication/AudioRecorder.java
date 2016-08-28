@@ -46,6 +46,7 @@ public class AudioRecorder implements TransitionListener
     }
 
     public void StartRecord() {
+        SoundDetector.instance().Pause();
         m_mr = new MediaRecorder();
         m_mr.setAudioSource(MediaRecorder.AudioSource.MIC);
         m_mr.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -69,6 +70,7 @@ public class AudioRecorder implements TransitionListener
             Log.e("AudioRecorder", "StopRecord failed");
         }
         m_mr = null;
+        SoundDetector.instance().Start();
         return m_filename;
     }
 
