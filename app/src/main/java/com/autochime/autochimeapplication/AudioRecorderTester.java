@@ -34,7 +34,7 @@ public class AudioRecorderTester {
                 if (m_isPlaying) {
                     m_ar.StopPlayback();
                 } else {
-                    m_ar.StartPlayback();
+//                    m_ar.StartPlayback();
                 }
                 m_isPlaying = !m_isPlaying;
             }
