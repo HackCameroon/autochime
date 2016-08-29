@@ -19,8 +19,8 @@ interface SoundListener {
  * Created by Wilbur on 08/28/16.
  */
 public class SoundDetector implements Runnable {
-    private boolean isRecording = false;
-    private boolean isReallyRecording = false;
+    AudioRecord recorder = null;
+    int mBufferSize;
 
     private static SoundDetector mInstance = null;
     public static SoundDetector instance() {
@@ -28,22 +28,28 @@ public class SoundDetector implements Runnable {
             mInstance = new SoundDetector();
         return mInstance;
     }
-    SoundDetector() {}
+    SoundDetector() {
+        int iSampleRate = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_SYSTEM);
+        mBufferSize = AudioRecord.getMinBufferSize(iSampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
+        recorder = new AudioRecord(MediaRecorder.AudioSource.MIC, iSampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, mBufferSize);
+    }
 
     private List<SoundListener> mListeners = new ArrayList<SoundListener>();
     public void addListener(SoundListener listener) { mListeners.add(listener); }
     public void OnDetect() { for (SoundListener listener : mListeners) listener.onSoundDetected(); }
 
     public void Start() {
-        isRecording = true;
+        if (recorder == null)
+            return;
+        if (recorder.getRecordingState() == AudioRecord.RECORDSTATE_STOPPED)
+            recorder.startRecording();
     }
 
     public void Pause() {
-        isRecording = false;
-    }
-
-    public boolean IsReady() {
-        return isRecording == isReallyRecording;
+        if (recorder == null)
+            return;
+        if (recorder.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING)
+            recorder.stop();
     }
 
     String str(double value) {
@@ -71,37 +77,18 @@ public class SoundDetector implements Runnable {
     @Override
     public void run() {
         android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
-        AudioRecord recorder = null;
         short[][] buffers = new short[256][160];
         int ix = 0;
         try {
-            int iSampleRate = AudioTrack.getNativeOutputSampleRate(AudioManager.STREAM_SYSTEM);
-            int bufferSize = AudioRecord.getMinBufferSize(iSampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
-            recorder = new AudioRecord(MediaRecorder.AudioSource.MIC, iSampleRate, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize);
             while (true) {
-                if (isRecording) {
-                    if (recorder.getRecordingState() == AudioRecord.RECORDSTATE_STOPPED) {
-                        isReallyRecording = true;
-                        recorder.startRecording();
-                    }
-                    short[] buffer = buffers[ix++ % buffers.length];
-                    bufferSize = recorder.read(buffer, 0, buffer.length);
-                    Process(buffer);
-                } else {
-                    if (recorder.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING) {
-                        recorder.stop();
-                        isReallyRecording = false;
-                    }
-                }
+                if (recorder.getRecordingState() != AudioRecord.RECORDSTATE_RECORDING)
+                    continue;
+                short[] buffer = buffers[ix++ % buffers.length];
+                mBufferSize = recorder.read(buffer, 0, buffer.length);
+                Process(buffer);
             }
         } catch (Throwable x) {
             Log.e("SoundDetector", "Error analyzing voice");
-        } finally {
-            close();
         }
-    }
-
-    private void close(){
-        isRecording = false;
     }
 }

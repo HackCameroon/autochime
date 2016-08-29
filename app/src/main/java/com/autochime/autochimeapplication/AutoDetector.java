@@ -45,7 +45,7 @@ public class AutoDetector implements MotionListener, SoundListener {
     long mPrevMotionTime = 0;
     long mSound = 0;
     long mPrevSoundTime = 0;
-    float timeDelta = 0.85f;
+    float timeDelta = 0.80f;
 
     @Override public void onMotionChange(boolean detected) {
         long currTime = System.currentTimeMillis();
@@ -76,6 +76,7 @@ public class AutoDetector implements MotionListener, SoundListener {
         if (mPrevMotionTime == 0 || mPrevSoundTime == 0)
             return;
         long check = mSound + mMotion;
+        Log.d("0", Long.toString(check));
         if (check < 350) {
             OnDetectChange(true);
         }

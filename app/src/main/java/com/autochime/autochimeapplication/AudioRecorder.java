@@ -3,6 +3,7 @@ package com.autochime.autochimeapplication;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 import android.os.Environment;
+import android.os.Handler;
 import android.util.Log;
 
 import java.io.FileInputStream;
@@ -38,22 +39,18 @@ public class AudioRecorder implements TransitionListener
     @Override public void onTransition(StateMachine.State state) {
         switch (state) {
             case Default:
-               // StopRecord();
+                StopRecord();
                 break;
             default:
-                //StartRecord();
+                StartRecord();
                 break;
         }
     }
 
     public void StartRecord() {
-        SoundDetector soundDetector = SoundDetector.instance();
-        soundDetector.Pause();
-        while(!soundDetector.IsReady()) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {}
-        }
+        if (m_mr != null)
+            return;
+        SoundDetector.instance().Pause();
         m_mr = new MediaRecorder();
         m_mr.setAudioSource(MediaRecorder.AudioSource.MIC);
         m_mr.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
@@ -79,12 +76,6 @@ public class AudioRecorder implements TransitionListener
         }
         m_mr = null;
         SoundDetector.instance().Start();
-        SoundDetector soundDetector = SoundDetector.instance();
-        while(!soundDetector.IsReady()) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {}
-        }
         return m_filename;
     }
 
