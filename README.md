@@ -1,6 +1,6 @@
 # autochime
 
-**Autochime** is an Android app created at Chimehack 3 @Facebook, Menlo Park.
+**Autochime** is an Android app created at Chimehack 3 @Facebook, Menlo Park. https://devpost.com/software/chimehack3
 
 
 ## Inspiration 
